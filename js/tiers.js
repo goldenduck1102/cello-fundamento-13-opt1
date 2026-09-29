@@ -1,0 +1,93 @@
+window.EVENT_TIERS = [
+  {
+    "id": "vvip",
+    "name": "VVIP",
+    "price": 5000000,
+    "color": "#e6d84c",
+    "desc": "Tầng 1 · A–G · Vé mời, không mở bán",
+    "area": "Tầng 1 · A–G · Vé mời, không mở bán",
+    "label": "VÉ MỜI",
+    "floor": 1,
+    "invitation": true,
+    "soldOut": true,
+    "zones": []
+  },
+  {
+    "id": "vip",
+    "name": "VIP",
+    "price": 2500000,
+    "color": "#d8b463",
+    "desc": "Tầng 1 · K; trung tâm L–P",
+    "area": "Tầng 1 · K; trung tâm L–P",
+    "label": "TẦNG 1",
+    "floor": 1,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  },
+  {
+    "id": "premium1",
+    "name": "Premium 1",
+    "price": 2000000,
+    "color": "#9db8d2",
+    "desc": "Tầng 1 · Hai bên L–P; Q–S",
+    "area": "Tầng 1 · Hai bên L–P; Q–S",
+    "label": "TẦNG 1",
+    "floor": 1,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  },
+  {
+    "id": "premium2",
+    "name": "Premium 2",
+    "price": 1500000,
+    "color": "#b6bdc8",
+    "desc": "Tầng 1 · T–U",
+    "area": "Tầng 1 · T–U",
+    "label": "TẦNG 1",
+    "floor": 1,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  },
+  {
+    "id": "upper",
+    "name": "Upper",
+    "price": 1500000,
+    "color": "#83d768",
+    "desc": "Tầng 2 · A9–32, B9–33",
+    "area": "Tầng 2 · A9–32, B9–33",
+    "label": "TẦNG 2",
+    "floor": 2,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  },
+  {
+    "id": "standard",
+    "name": "Standard",
+    "price": 1200000,
+    "color": "#80bacd",
+    "desc": "Tầng 2 · AA–CC; A1–8, B1–8; C–D",
+    "area": "Tầng 2 · AA–CC; A1–8, B1–8; C–D",
+    "label": "TẦNG 2",
+    "floor": 2,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  },
+  {
+    "id": "economy",
+    "name": "Economy",
+    "price": 1000000,
+    "color": "#c4b9aa",
+    "desc": "Tầng 2 · E–I",
+    "area": "Tầng 2 · E–I",
+    "label": "TẦNG 2",
+    "floor": 2,
+    "invitation": false,
+    "soldOut": false,
+    "zones": []
+  }
+];
