@@ -58,7 +58,7 @@
   setArtist(0);
 
 // The progress line and slide advance share the same five-second cycle.
-const artistBook=make('a','button button-gold artist-book booking-cta','Đặt vé');artistBook.href='https://orchestars.vn/';const bookArrow=make('span','','↗');bookArrow.setAttribute('aria-hidden','true');artistBook.append(bookArrow);$('.spotlight-controls').append(artistBook);
+const artistBook=make('a','button button-gold artist-book booking-cta','Đặt vé');artistBook.href='https://orchestars.vn/';const bookArrow=make('span','');bookArrow.innerHTML='<svg class="link-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg>';bookArrow.setAttribute('aria-hidden','true');artistBook.append(bookArrow);$('.spotlight-controls').append(artistBook);
 let paused=matchMedia('(prefers-reduced-motion:reduce)').matches,visible=false,timer;
 function schedule(){clearTimeout(timer);$('#artist-grid').classList.remove('auto-running');void $('#artist-grid').offsetWidth;$('#artist-grid').classList.toggle('auto-running',!paused&&visible&&!document.hidden);if(!paused&&visible&&!document.hidden)timer=setTimeout(()=>{setArtist(currentArtist+1);schedule();},5000);}
 function setPaused(value){paused=value;schedule();}

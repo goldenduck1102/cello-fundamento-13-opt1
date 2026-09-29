@@ -76,3 +76,6 @@ body{font-size:17px;line-height:1.75}.desktop-nav a{font-size:14px}.micro-label,
 .programme details.programme-work[open]>summary span{transform:none}.programme details.programme-work[open]>summary>.work-toggle{transform:rotate(45deg)}
 
 #about-title .about-concert-edition{display:block;font:400 clamp(24px,2.6vw,38px)/1.15 Georgia,serif;letter-spacing:.04em;color:var(--gold);margin-top:4px}.venue-photo img{object-position:center center}
+
+/* Vector arrows retain the same appearance on iOS and desktop. */
+.link-arrow-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}
