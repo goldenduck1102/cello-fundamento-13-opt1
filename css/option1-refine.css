@@ -82,3 +82,6 @@ body{font-size:17px;line-height:1.75}.desktop-nav a{font-size:14px}.micro-label,
 
 /* Vietnamese heading uses a complete webfont, avoiding Windows Georgia fallback. */
 .journey-heading h2{font-family:"Playfair Display",Georgia,serif}
+
+/* Match Opt2: only past concert images are subdued. */
+.journey-card:not(.upcoming)>img{opacity:.55;filter:saturate(.55)}
