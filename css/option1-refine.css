@@ -88,3 +88,93 @@ body{font-size:17px;line-height:1.75}.desktop-nav a{font-size:14px}.micro-label,
 
 .brand img.site-orchestars-logo{width:180px;height:auto;max-width:100%;object-fit:contain;filter:brightness(0) invert(1)}
 @media(max-width:680px){.brand img.site-orchestars-logo{width:140px}}
+
+/* Keep the desktop headline break before the complete superlative phrase. */
+@media (min-width: 681px) {
+  .hero-intro .hero-eyebrow-second-line { display: block; }
+}
+
+@media (min-width: 681px) {
+  .hero-intro { transform: translateY(-24px); }
+  .hero-intro .hero-description { font-size: 22px; line-height: 1.5; }
+}
+
+/* Artist credentials, editorial biography, and signature tags. */
+.spotlight-details { max-width: 500px; font-size: 15px; line-height: 1.8; color: #aeb8c3; }
+.artist-highlights { margin: 0 0 24px; padding-left: 18px; display: grid; gap: 8px; color: var(--white); }
+.artist-highlights li::marker { color: var(--gold); }
+.spotlight-details p { margin: 0; }
+.artist-tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 22px 0 0; padding: 0; }
+.artist-tags li { border: 1px solid #dbb86655; color: var(--gold); padding: 5px 12px; font-size: 12px; letter-spacing: .3px; }
+@media (max-width: 680px) {
+  .spotlight-details { max-width: none; font-size: 15px; }
+  .artist-highlights { gap: 10px; }
+}
+
+.artist-credentials { margin-top: 22px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.artist-credentials > summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 48px; padding: 12px 0; list-style: none; cursor: pointer; font: 500 14px/1.5 var(--sans); color: var(--gold); }
+.artist-credentials > summary::-webkit-details-marker { display: none; }
+.artist-credentials > summary:hover { color: var(--gold-bright); }
+.artist-credentials > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.credentials-toggle::before { content: '+'; font-size: 22px; font-weight: 300; }
+.artist-credentials[open] .credentials-toggle::before { content: '−'; }
+.artist-credentials .artist-highlights { margin: 4px 0 20px; }
+
+/* Balance the portrait and editorial column from a shared top edge. */
+.artist-spotlight { align-items: start; }
+.spotlight-copy > .eyebrow { min-height: 0; margin-bottom: 14px; }
+.spotlight-copy h3#spotlight-name { height: auto; min-height: 140px; justify-content: flex-start; gap: 8px; margin-bottom: 24px; }
+.spotlight-copy h3#spotlight-name img { height: 64px!important; }
+@media (min-width: 681px) {
+  .artist-spotlight { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 4.2vw, 60px); padding-top: 36px; }
+  .spotlight-copy { padding-top: 0; max-width: 520px; }
+  .spotlight-visual { align-self: start; height: 620px; margin: 0; }
+  .spotlight-visual img { left: 0; width: 100%; height: 600px; top: 0; bottom: auto; object-position: center top; }
+  .spotlight-details { max-width: none; }
+  .spotlight-controls { margin-top: 22px; }
+}
+@media (min-width: 681px) and (max-width: 960px) {
+  .spotlight-visual { height: 540px; }
+  .spotlight-visual img { height: 520px; }
+  .spotlight-copy h3#spotlight-name { min-height: 116px; }
+  .spotlight-copy h3#spotlight-name img { height: 52px!important; }
+}
+@media (max-width: 680px) {
+  .spotlight-copy > .eyebrow { margin-bottom: 10px; }
+  .spotlight-copy h3#spotlight-name { min-height: 112px; gap: 8px; margin-bottom: 22px; }
+  .spotlight-copy h3#spotlight-name img { height: 50px!important; }
+}
+
+@media(max-width:680px) {
+ .ticket-columns { display:flex; flex-direction:column; gap:20px; }
+ .ticket-column-right { display:contents; }
+ .ticket-columns #tier-grid { order:1; width:100%; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+ .ticket-columns .tier-card { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:4px; min-height:76px; padding:12px; border:1px solid var(--line); background:transparent; }
+ .ticket-columns .tier-card.is-selected { border-color:var(--gold); background:#dbb86610; }
+ .ticket-columns .tier-card .tier-index,.ticket-columns .tier-card .tier-arrow { display:none; }
+ .ticket-columns .tier-top h3 { font-size:16px; line-height:1.35; letter-spacing:0; }
+ .ticket-columns .tier-price { font-size:14px; line-height:1.4; }
+ .ticket-columns .illustrated-map { order:0; width:100%; padding:0; }
+ .ticket-columns .handoff-note { order:2; margin:0; font-size:13px; }
+ .ticket-columns .ticket-handoff { order:3; margin:0; }
+ #tier-map { width:calc(100% + 24px); max-width:none; margin-left:-12px; height:auto; }
+ #tier-map .map-dot { r:4px; }
+ .map-selection { margin:10px 0; }
+ .map-legend { padding-top:14px; margin-top:0; }
+ .map-caption { font-size:12px; line-height:1.6; }
+}
+@media(max-width:680px) {
+ .ticket-columns .tier-price { margin:0; align-self:flex-start; text-align:left; }
+}
+
+@media(max-width:680px) {
+ #seat-booking .map-selection { display:none; }
+}
+
+@media (min-width:681px) {
+ .ticket-columns .tier-card { grid-template-columns:24px minmax(0,1fr) 155px; padding-right:12px; }
+}
+@media (max-width:680px) {
+ .mobile-booking { background:#060b12; backdrop-filter:none; -webkit-backdrop-filter:none; bottom:0; padding-bottom:calc(12px + env(safe-area-inset-bottom, 0px)); }
+ .ticket-columns .illustrated-map { position:static; }
+}

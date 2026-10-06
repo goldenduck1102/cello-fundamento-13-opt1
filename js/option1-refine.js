@@ -1,4 +1,7 @@
 (()=>{'use strict';const config=window.EVENT_CONFIG;const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];const assetUrl=p=>(window.INLINE_ASSETS||{})[p]||p;const track=()=>{};const make=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;};
+  // Option 1 ticket labels approved in the annotated ticket reference.
+  const tierNames = { vip: 'Platinum', premium1: 'Gold', premium2: 'Silver' };
+  window.EVENT_TIERS = window.EVENT_TIERS.filter(tier => tier.id !== 'upper').map(tier => ({ ...tier, name: tierNames[tier.id] || tier.name }));
   const artistWords = {mischa:['mischa','maisky'],lily:['lily','maisky'],nicolas:['nicolas','dautricourt'],xuan:['dinh-hoai','xuan']};
   let currentArtist = 0;
   function setArtist(index, focusTab = false) {
@@ -9,7 +12,8 @@
     if (!matchMedia('(prefers-reduced-motion:reduce)').matches) { photo.animate([{opacity:.35,transform:'translateX(12px)'},{opacity:1,transform:'translateX(0)'}],{duration:550,easing:'ease-out'}); }
     photo.alt = 'Ảnh nghệ sĩ từ hồ sơ chương trình: ' + artist.name;
     $('#spotlight-role').textContent = '[ ' + artist.role.toLocaleUpperCase('vi') + ' ]';
-    $('#spotlight-bio').textContent = artist.bio;
+    $('#spotlight-details details').open = false;
+    renderDetails($('#spotlight-details'), artist);
     $('#artist-position').textContent = String(currentArtist+1).padStart(2,'0') + ' / ' + String(config.artists.length).padStart(2,'0');
     $('.spotlight-copy').dataset.artist = artist.id;
     const title = $('#spotlight-name');
@@ -60,7 +64,7 @@
 // The progress line and slide advance share the same five-second cycle.
 const artistBook=make('a','button button-gold artist-book booking-cta','Đặt vé');artistBook.href='https://orchestars.vn/';const bookArrow=make('span','');bookArrow.innerHTML='<svg width="24" height="24" class="link-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg>';bookArrow.setAttribute('aria-hidden','true');artistBook.append(bookArrow);$('.spotlight-controls').append(artistBook);
 let paused=matchMedia('(prefers-reduced-motion:reduce)').matches,visible=false,timer;
-function schedule(){clearTimeout(timer);$('#artist-grid').classList.remove('auto-running');void $('#artist-grid').offsetWidth;$('#artist-grid').classList.toggle('auto-running',!paused&&visible&&!document.hidden);if(!paused&&visible&&!document.hidden)timer=setTimeout(()=>{setArtist(currentArtist+1);schedule();},5000);}
+function schedule(){clearTimeout(timer);$('#artist-grid').classList.remove('auto-running');void $('#artist-grid').offsetWidth;$('#artist-grid').classList.toggle('auto-running',!paused&&visible&&!document.hidden&&!$('.artist-credentials').open);if(!paused&&visible&&!document.hidden&&!$('.artist-credentials').open)timer=setTimeout(()=>{setArtist(currentArtist+1);schedule();},5000);}
 function setPaused(value){paused=value;schedule();}
 
 $$('.artist-tab,#artist-prev,#artist-next').forEach(el=>{el.addEventListener('click',schedule);el.addEventListener('keydown',event=>{if(['ArrowRight','ArrowLeft','Home','End'].includes(event.key))schedule();});});
@@ -68,11 +72,35 @@ $$('.artist-tab,#artist-prev,#artist-next').forEach(el=>{el.addEventListener('cl
 
 new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;schedule();},{threshold:.2}).observe($('#artist-panel'));
 document.addEventListener('visibilitychange',schedule);matchMedia('(prefers-reduced-motion:reduce)').addEventListener('change',e=>{if(e.matches)setPaused(true);});setPaused(paused);
-function sizeBios(){const bio=$('#spotlight-bio');const probe=bio.cloneNode(false);probe.removeAttribute('id');probe.style.cssText='position:absolute;visibility:hidden;pointer-events:none;height:auto;min-height:0;width:'+bio.getBoundingClientRect().width+'px';bio.parentNode.append(probe);let height=0;config.artists.forEach(a=>{probe.textContent=a.bio;height=Math.max(height,probe.getBoundingClientRect().height);});probe.remove();bio.style.minHeight=Math.ceil(height)+'px';}
-document.fonts.ready.then(sizeBios);let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(sizeBios,120);});sizeBios();
+function renderDetails(container, artist) {
+  container.querySelector('.artist-highlights').replaceChildren(...artist.highlights.map(text => make('li', '', text)));
+  container.querySelector('p').textContent = artist.bio;
+  container.querySelector('.artist-tags').replaceChildren(...artist.tags.map(text => make('li', '', text)));
+}
+function sizeBios() {
+  const details = $('#spotlight-details');
+  const probe = details.cloneNode(true);
+  probe.removeAttribute('id');
+  probe.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+  probe.setAttribute('aria-hidden', 'true');
+  probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;height:auto;min-height:0;width:' + details.getBoundingClientRect().width + 'px';
+  details.parentNode.append(probe);
+  let height = 0;
+  config.artists.forEach(artist => {
+    renderDetails(probe, artist);
+    height = Math.max(height, probe.getBoundingClientRect().height);
+  });
+  probe.remove();
+  details.style.minHeight = Math.ceil(height) + 'px';
+}
+$('.artist-credentials').addEventListener('toggle', () => { sizeBios(); schedule(); });
+document.fonts.ready.then(sizeBios);
+let resizeTimer;
+addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(sizeBios, 120); });
+sizeBios();
 const money=n=>new Intl.NumberFormat('vi-VN').format(n)+' ₫';
 const map=$('#tier-map-dots'),NS='http://www.w3.org/2000/svg';
-function seatTier(row,n){const r=row.label;if(row.floor===2)return ['A','B'].includes(r)&&n>=9?'upper':['AA','BB','CC','A','B','C','D'].includes(r)?'standard':'economy';return ['A','B','C','D','E','F','G'].includes(r)?'vvip':['H','I'].includes(r)?'locked':['T','U'].includes(r)?'premium2':r==='K'||(['L','M'].includes(r)&&n>=13)||(['N','P'].includes(r)&&n>=11)?'vip':'premium1';}
+function seatTier(row,n){return window.EVENT_SEAT_TIERS[row.floor+':'+row.label+':'+n];}
 // Preserve aisle gaps and side balconies while bending rows into an illustrative arc.
 let floorRows={1:0,2:0};
 window.EVENT_SEAT_ROWS.forEach(row=>{
@@ -94,8 +122,8 @@ window.EVENT_SEAT_ROWS.forEach(row=>{
   const title=document.createElementNS(NS,'title');title.textContent='Tầng '+row.floor+' · Hàng '+row.label+' · Ghế '+n;dot.append(title);map.append(dot);
  });
 });
-function selectTier(id){const tier=window.EVENT_TIERS.find(t=>t.id===id);$$('.tier-card').forEach(b=>{const active=b.dataset.tier===id;b.classList.toggle('is-selected',active);b.setAttribute('aria-pressed',String(active));});$$('.map-dot').forEach(dot=>dot.classList.toggle('is-highlighted',dot.dataset.tier===id));$('.map-selection').textContent=tier.name+' · '+money(tier.price)+(tier.invitation?' · Khu vé mời':'');$('#tier-map-title').textContent='Đang làm nổi bật khu '+tier.name+' tại tầng '+tier.floor;}
-window.EVENT_TIERS.forEach((t,i)=>{const row=make('button','tier-card');row.type='button';row.dataset.tier=t.id;row.setAttribute('aria-controls','tier-map');const top=make('div','tier-top');top.append(make('h3','',t.name));row.append(make('span','tier-index',String(i+1).padStart(2,'0')),top,make('p','tier-price',money(t.price)),make('span','tier-arrow','←'));row.addEventListener('click',()=>selectTier(t.id));$('#tier-grid').append(row);});selectTier('vip');
+function selectTier(id){const tier=window.EVENT_TIERS.find(t=>t.id===id);if(!tier)return;$$('.tier-card').forEach(b=>{const active=b.dataset.tier===id;b.classList.toggle('is-selected',active);b.setAttribute('aria-pressed',String(active));});$$('.map-dot').forEach(dot=>dot.classList.toggle('is-highlighted',dot.dataset.tier===id));$('.map-selection').textContent=tier.name+' · '+money(tier.price)+(tier.invitation?' · Khu vé mời':'');$('#tier-map-title').textContent='Đang làm nổi bật khu '+tier.name+' tại tầng '+tier.floor;}
+window.EVENT_TIERS.forEach((t,i)=>{const row=make('button','tier-card');row.type='button';row.dataset.tier=t.id;row.setAttribute('aria-controls','tier-map');const top=make('div','tier-top');top.append(make('h3','',t.name));row.append(make('span','tier-index',String(i+1).padStart(2,'0')),top,make('p','tier-price',money(t.price)));row.addEventListener('click',()=>selectTier(t.id));$('#tier-grid').append(row);});selectTier('vip');
 $('#tier-map').addEventListener('click',event=>{
  const svg=$('#tier-map'),point=svg.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
  const local=point.matrixTransform(svg.getScreenCTM().inverse());
@@ -104,6 +132,7 @@ $('#tier-map').addEventListener('click',event=>{
  if(!nearest||distance>14)return;
  const location='Tầng '+nearest.dataset.floor+' · Hàng '+nearest.dataset.row+' · Ghế '+nearest.dataset.seat;
  if(nearest.dataset.tier==='locked'){$('.map-selection').textContent=location+' · Không mở bán';return;}
+ if(!window.EVENT_TIERS.some(t=>t.id===nearest.dataset.tier))return;
  selectTier(nearest.dataset.tier);$('.map-selection').textContent+=' · '+location;
 });
 
